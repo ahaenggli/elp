@@ -4,12 +4,12 @@ object Form8: TForm8
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Form8'
   ClientHeight = 364
-  ClientWidth = 434
+  ClientWidth = 444
   Color = clBtnFace
-  Constraints.MaxHeight = 400
-  Constraints.MaxWidth = 450
-  Constraints.MinHeight = 400
-  Constraints.MinWidth = 450
+  Constraints.MaxHeight = 402
+  Constraints.MaxWidth = 460
+  Constraints.MinHeight = 391
+  Constraints.MinWidth = 460
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -22,8 +22,8 @@ object Form8: TForm8
   PixelsPerInch = 96
   TextHeight = 13
   object Image1: TImage
-    Left = -31
-    Top = -36
+    Left = -22
+    Top = -40
     Width = 464
     Height = 400
     Center = True
@@ -31,7 +31,7 @@ object Form8: TForm8
     Stretch = True
   end
   object Label2: TLabel
-    Left = 381
+    Left = 397
     Top = 62
     Width = 6
     Height = 13
@@ -39,7 +39,7 @@ object Form8: TForm8
     Visible = False
   end
   object Label3: TLabel
-    Left = 381
+    Left = 397
     Top = 126
     Width = 6
     Height = 13
@@ -47,7 +47,7 @@ object Form8: TForm8
     Visible = False
   end
   object Label4: TLabel
-    Left = 280
+    Left = 296
     Top = 14
     Width = 78
     Height = 13
@@ -60,7 +60,7 @@ object Form8: TForm8
     ParentFont = False
   end
   object Label5: TLabel
-    Left = 360
+    Left = 376
     Top = 14
     Width = 7
     Height = 13
@@ -73,14 +73,14 @@ object Form8: TForm8
     ParentFont = False
   end
   object Label6: TLabel
-    Left = 286
+    Left = 302
     Top = 283
     Width = 52
     Height = 13
     Caption = 'Abbrechen'
   end
   object Label1: TLabel
-    Left = 280
+    Left = 296
     Top = 112
     Width = 105
     Height = 13
@@ -93,10 +93,11 @@ object Form8: TForm8
     ParentFont = False
   end
   object Memo1: TMemo
-    Left = 24
+    Left = 8
     Top = 56
-    Width = 241
-    Height = 62
+    Width = 282
+    Height = 90
+    Alignment = taCenter
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -14
@@ -108,11 +109,10 @@ object Form8: TForm8
     ParentFont = False
     ReadOnly = True
     TabOrder = 0
-    WantReturns = False
-    WordWrap = False
+    OnChange = Memo1Change
   end
   object Edit2: TEdit
-    Left = 381
+    Left = 397
     Top = 81
     Width = 31
     Height = 21
@@ -122,10 +122,11 @@ object Form8: TForm8
     Visible = False
   end
   object Memo2: TMemo
-    Left = 24
+    Left = 8
     Top = 246
-    Width = 241
-    Height = 62
+    Width = 288
+    Height = 90
+    Alignment = taCenter
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -14
@@ -137,9 +138,10 @@ object Form8: TForm8
     ParentFont = False
     ReadOnly = True
     TabOrder = 2
+    OnChange = Memo2Change
   end
   object Button1: TBitBtn
-    Left = 116
+    Left = 132
     Top = 161
     Width = 40
     Height = 40
@@ -237,8 +239,8 @@ object Form8: TForm8
       00FF}
   end
   object StaticText1: TStaticText
-    Left = 24
-    Top = 33
+    Left = 8
+    Top = 30
     Width = 53
     Height = 20
     Caption = 'Abfrage'
@@ -251,7 +253,7 @@ object Form8: TForm8
     TabOrder = 4
   end
   object StaticText3: TStaticText
-    Left = 24
+    Left = 8
     Top = 220
     Width = 52
     Height = 20
@@ -265,7 +267,7 @@ object Form8: TForm8
     TabOrder = 5
   end
   object StaticText4: TStaticText
-    Left = 280
+    Left = 296
     Top = 38
     Width = 79
     Height = 17
@@ -279,7 +281,7 @@ object Form8: TForm8
     TabOrder = 6
   end
   object StaticText5: TStaticText
-    Left = 280
+    Left = 296
     Top = 62
     Width = 68
     Height = 17
@@ -293,7 +295,7 @@ object Form8: TForm8
     TabOrder = 7
   end
   object StaticText6: TStaticText
-    Left = 280
+    Left = 296
     Top = 85
     Width = 42
     Height = 17
@@ -307,7 +309,7 @@ object Form8: TForm8
     TabOrder = 8
   end
   object StaticText7: TStaticText
-    Left = 360
+    Left = 376
     Top = 38
     Width = 11
     Height = 17
@@ -321,7 +323,7 @@ object Form8: TForm8
     TabOrder = 9
   end
   object StaticText8: TStaticText
-    Left = 350
+    Left = 366
     Top = 62
     Width = 11
     Height = 17
@@ -335,7 +337,7 @@ object Form8: TForm8
     TabOrder = 10
   end
   object StaticText9: TStaticText
-    Left = 350
+    Left = 366
     Top = 85
     Width = 11
     Height = 17
@@ -349,7 +351,7 @@ object Form8: TForm8
     TabOrder = 11
   end
   object BitBtn2: TBitBtn
-    Left = 344
+    Left = 360
     Top = 274
     Width = 75
     Height = 34
@@ -432,7 +434,7 @@ object Form8: TForm8
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
   end
   object BitBtn1: TBitBtn
-    Left = 70
+    Left = 86
     Top = 161
     Width = 40
     Height = 40
@@ -491,7 +493,7 @@ object Form8: TForm8
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
   end
   object BitBtn3: TBitBtn
-    Left = 162
+    Left = 178
     Top = 161
     Width = 40
     Height = 40
@@ -550,21 +552,24 @@ object Form8: TForm8
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
   end
   object Button2: TButton
-    Left = 351
+    Left = 367
     Top = 342
     Width = 75
     Height = 18
     Caption = 'Fehler melden'
+    Enabled = False
     TabOrder = 15
+    Visible = False
     OnClick = Button2Click
   end
   object Timer1: TTimer
+    Enabled = False
     OnTimer = Timer1Timer
-    Left = 384
+    Left = 400
     Top = 30
   end
   object ActionList1: TActionList
-    Left = 224
+    Left = 240
     Top = 328
     object Action1: TAction
       Caption = 'Action1'

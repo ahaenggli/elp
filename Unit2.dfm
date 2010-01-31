@@ -2,7 +2,7 @@ object Form2: TForm2
   Left = 1
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'cadac'
+  Caption = 'Eco'
   ClientHeight = 362
   ClientWidth = 434
   Color = clBtnFace
@@ -23,8 +23,8 @@ object Form2: TForm2
   PixelsPerInch = 96
   TextHeight = 13
   object Image1: TImage
-    Left = -15
-    Top = -28
+    Left = -31
+    Top = -38
     Width = 464
     Height = 400
     Center = True
@@ -60,6 +60,202 @@ object Form2: TForm2
     Width = 52
     Height = 13
     Caption = 'Abbrechen'
+  end
+  object Zeichen7: TSpeedButton
+    Left = 245
+    Top = 120
+    Width = 23
+    Height = 23
+    Caption = #39
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen7Click
+  end
+  object Zeichen1: TSpeedButton
+    Left = 95
+    Top = 120
+    Width = 23
+    Height = 23
+    Caption = #231
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen1Click
+  end
+  object Zeichen2: TSpeedButton
+    Left = 120
+    Top = 120
+    Width = 23
+    Height = 23
+    Caption = #199
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen2Click
+  end
+  object Zeichen12: TSpeedButton
+    Left = 195
+    Top = 145
+    Width = 23
+    Height = 23
+    Caption = #233
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen12Click
+  end
+  object Zeichen9: TSpeedButton
+    Left = 120
+    Top = 145
+    Width = 23
+    Height = 23
+    Caption = #238
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen9Click
+  end
+  object Zeichen13: TSpeedButton
+    Left = 220
+    Top = 145
+    Width = 23
+    Height = 23
+    Caption = #232
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen13Click
+  end
+  object Zeichen8: TSpeedButton
+    Left = 95
+    Top = 145
+    Width = 23
+    Height = 23
+    Caption = #239
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen8Click
+  end
+  object Zeichen3: TSpeedButton
+    Left = 145
+    Top = 120
+    Width = 23
+    Height = 23
+    Caption = #226
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen3Click
+  end
+  object Zeichen4: TSpeedButton
+    Left = 170
+    Top = 120
+    Width = 23
+    Height = 23
+    Caption = #224
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen4Click
+  end
+  object Zeichen5: TSpeedButton
+    Left = 195
+    Top = 120
+    Width = 23
+    Height = 23
+    Caption = #251
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen5Click
+  end
+  object Zeichen6: TSpeedButton
+    Left = 220
+    Top = 120
+    Width = 23
+    Height = 23
+    Caption = #249
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen6Click
+  end
+  object Zeichen10: TSpeedButton
+    Left = 145
+    Top = 145
+    Width = 23
+    Height = 23
+    Caption = #244
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen10Click
+  end
+  object Zeichen11: TSpeedButton
+    Left = 170
+    Top = 145
+    Width = 23
+    Height = 23
+    Caption = #234
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen11Click
+  end
+  object Zeichen14: TSpeedButton
+    Left = 245
+    Top = 145
+    Width = 23
+    Height = 23
+    Caption = #235
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'System'
+    Font.Style = []
+    ParentFont = False
+    OnClick = Zeichen14Click
   end
   object Label5: TLabel
     Left = 364
@@ -107,7 +303,7 @@ object Form2: TForm2
     Height = 62
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -14
+    Font.Height = -13
     Font.Name = 'Tahoma'
     Font.Style = []
     HideSelection = False
@@ -115,7 +311,9 @@ object Form2: TForm2
       'Memo2')
     ParentFont = False
     ReadOnly = True
-    TabOrder = 3
+    TabOrder = 0
+    WantReturns = False
+    WordWrap = False
   end
   object Edit1: TEdit
     Left = 24
@@ -140,7 +338,7 @@ object Form2: TForm2
     Top = 161
     Width = 40
     Height = 40
-    TabOrder = 4
+    TabOrder = 3
     OnClick = Button1Click
     Glyph.Data = {
       FE0A0000424DFE0A00000000000036000000280000001E0000001E0000000100
@@ -238,7 +436,7 @@ object Form2: TForm2
     Top = 274
     Width = 75
     Height = 34
-    TabOrder = 14
+    TabOrder = 4
     OnClick = BitBtn2Click
     Glyph.Data = {
       36090000424D3609000000000000360000002800000020000000180000000100
@@ -318,11 +516,11 @@ object Form2: TForm2
   end
   object BitBtn1: TBitBtn
     Left = 184
-    Top = 283
+    Top = 307
     Width = 81
-    Height = 25
+    Height = 26
     Caption = 'Als Eingabe'
-    TabOrder = 15
+    TabOrder = 5
     OnClick = BitBtn1Click
     Glyph.Data = {
       36030000424D3603000000000000360000002800000010000000100000000100
@@ -359,14 +557,15 @@ object Form2: TForm2
     Height = 62
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -14
+    Font.Height = -13
     Font.Name = 'Tahoma'
     Font.Style = []
+    HideSelection = False
     Lines.Strings = (
       'Memo1')
     ParentFont = False
     ReadOnly = True
-    TabOrder = 0
+    TabOrder = 6
     WantReturns = False
     WordWrap = False
   end
@@ -382,7 +581,7 @@ object Form2: TForm2
     Font.Name = 'System'
     Font.Style = []
     ParentFont = False
-    TabOrder = 5
+    TabOrder = 7
   end
   object StaticText2: TStaticText
     Left = 24
@@ -396,7 +595,7 @@ object Form2: TForm2
     Font.Name = 'System'
     Font.Style = []
     ParentFont = False
-    TabOrder = 6
+    TabOrder = 8
   end
   object StaticText3: TStaticText
     Left = 24
@@ -410,7 +609,7 @@ object Form2: TForm2
     Font.Name = 'System'
     Font.Style = []
     ParentFont = False
-    TabOrder = 7
+    TabOrder = 9
   end
   object StaticText4: TStaticText
     Left = 280
@@ -424,7 +623,7 @@ object Form2: TForm2
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 8
+    TabOrder = 10
   end
   object StaticText5: TStaticText
     Left = 280
@@ -438,7 +637,7 @@ object Form2: TForm2
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 9
+    TabOrder = 11
   end
   object StaticText6: TStaticText
     Left = 280
@@ -452,7 +651,7 @@ object Form2: TForm2
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 10
+    TabOrder = 12
   end
   object StaticText7: TStaticText
     Left = 364
@@ -466,7 +665,7 @@ object Form2: TForm2
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 11
+    TabOrder = 13
   end
   object StaticText8: TStaticText
     Left = 350
@@ -480,7 +679,7 @@ object Form2: TForm2
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 12
+    TabOrder = 14
   end
   object StaticText9: TStaticText
     Left = 350
@@ -494,7 +693,7 @@ object Form2: TForm2
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 13
+    TabOrder = 15
   end
   object Button2: TButton
     Left = 351
@@ -502,13 +701,15 @@ object Form2: TForm2
     Width = 75
     Height = 18
     Caption = 'Fehler melden'
+    Enabled = False
     TabOrder = 16
+    Visible = False
     OnClick = Button2Click
   end
   object Timer1: TTimer
     OnTimer = Timer1Timer
-    Left = 384
-    Top = 30
+    Left = 264
+    Top = 22
   end
   object ActionList1: TActionList
     Left = 264

@@ -4,42 +4,46 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, StdCtrls, Buttons, jpeg;
+  Dialogs, ExtCtrls, StdCtrls, Buttons, jpeg, DateUtils, IdHttp, ActnList;
 
 type
+  TArray = Array of string;
   TForm9 = class(TForm)
+    Label6: TLabel;
+    Memo1: TMemo;
+    Memo2: TMemo;
+    StaticText1: TStaticText;
+    StaticText3: TStaticText;
+    BitBtn2: TBitBtn;
+    Timer1: TTimer;
+    Image1: TImage;
+    Label1: TLabel;
+    ActionList1: TActionList;
+    Action1: TAction;
+    Edit1: TEdit;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
-    Label5: TLabel;
-    Label6: TLabel;
-    Memo1: TMemo;
-    Edit2: TEdit;
-    Memo2: TMemo;
-    Button1: TBitBtn;
-    StaticText1: TStaticText;
-    StaticText3: TStaticText;
-    StaticText4: TStaticText;
-    StaticText5: TStaticText;
-    StaticText6: TStaticText;
-    StaticText7: TStaticText;
-    StaticText8: TStaticText;
-    StaticText9: TStaticText;
-    BitBtn2: TBitBtn;
-    Timer1: TTimer;
-    BitBtn1: TBitBtn;
-    BitBtn3: TBitBtn;
-    Image1: TImage;
-    procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure BitBtn1Click(Sender: TObject);
-    procedure BitBtn3Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormHide(Sender: TObject);
+    procedure Action1Execute(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure Memo1Change(Sender: TObject);
+    procedure Memo2Change(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
   private
     { Private-Deklarationen }
-FileName,Filecache,Path:String;
+FileName,Filecache,Path,max:String;
+isc,isc2,ii,iii:Integer;
+str:TStringlist;
+words:TArray;
+FileCacheSL:TStringList;
+    FWndProc  : TWndMethod;
+    FWndProc2  : TWndMethod;
+    procedure MemoWndProc(var Msg: TMessage);
+    procedure Memo2WndProc(var Msg: TMessage);
   public
     { Public-Deklarationen }
   end;
@@ -49,9 +53,19 @@ var
 
 implementation
 
-uses FastStrings, Unit1, Unit2, Unit3, Unit4, Unit5, Unit6, Unit7;
+uses FastStrings, Unit1, Unit2, Unit3, Unit4, Unit6, Unit7, Unit10;
 
 {$R *.dfm}
+procedure TForm9.MemoWndProc(var Msg: TMessage);
+begin
+  if Msg.Msg = WM_SETFOCUS then
+  begin
+    HideCaret(Memo1.Handle); // Cursor verstecken
+    Msg.Result := 0;
+  end else
+    FWndProc(Msg); // alte Fensterproceure aufrufen
+end;
+
 function explode(cDelimiter,  sValue : string; iCount : integer) : TArray;
 var
 s : string; i,p : integer;
@@ -93,295 +107,156 @@ function InArray(text:string;strings:array of string):boolean;
                 result := false;
           end;
       end;
-
-procedure TForm9.BitBtn1Click(Sender: TObject);
- var   str, tmp, ch, f_l, fl, a, b, ab:TStringlist;
-        loesung, frage, cache, e, f,tar,ttt: TArray;
-        fals: String;
-        i, zeile, z, c, d:Integer;
+function clearSTlist(sl:TStringlist):TSTringlist;
+var i:Integer;
+     sl2:TStringlist;
 begin
+sl2:=TStringlist.Create;
+  for i := 0 to sl.Count - 1 do begin
+    if sl[i]<>'' then sl2.Add(sl[i]);
+  end;
+result:=sl2;
+end;
 
-    tmp := TStringList.Create;
-    f_l:= TSTringList.Create;
-    fl:=TStringList.Create;
-    str := TStringList.Create;
-    ch := TStringList.Create;
-    a:=TStringlist.Create;
-    b:=TStringlist.Create;
-    ab:=TStringlist.Create;
-    str.LoadFromFile(FileName);
+procedure TForm9.Timer1Timer(Sender: TObject);
+ var
+        tar,ttt: TArray; i2:integer;
+begin
+inc(ii);
+if strtoint(edit1.text) = 0 then edit1.text:='4500';
 
-    loesung:=explode('|', str[0],3);
+timer1.interval:=strtoint(edit1.text);
+if (ii mod 2)=0 then begin
 
- a.LoadFromFile(path+':fehler_'+loesung[2]+'.csv');
-   for c := 0 to a.Count - 1 do begin
-    e:=explode('|', a[c], 5);
-    b.add(e[0]+'|'+e[1]+'|'+loesung[2]);
-   end;
-   if b.IndexOf(str[0]) <> -1 then begin
-      z:=b.IndexOf(str[0]);
-      f:=explode('|', a[z], 3);
-           if statictext8.caption='1'then begin d:=strtoint(f[2])-1; end  else begin d:=strtoint(f[2]); end;
-      a.delete(z);
-      if d <> 0 then begin a.Add(f[0]+'|'+f[1]+'|'+inttostr(d));end;
-   end;
-      a.SaveToFile(path+':fehler_'+loesung[2]+'.csv');
-    Edit2.Text:='0';
-     str.Delete(0);
-     str.SaveToFile(FileName);
+  str.delete(0);
+   str.SaveToFile(FileName);
 
-      if str.Count <> 0 then
+    if str.Text <> '' then
       begin
+    str.Clear;
+    str.LoadFromFile(FileName);
+    words:=explode('|', str[0], 0);
+    ttt:=explode('[]', words[isc], 0);
+    Memo1.Text:='';
+    Memo1.Lines[0]:=ttt[0];
+  for i2:=1 to high(ttt) do Memo1.Lines.add(ttt[i2]);
 
-      str.Clear;
-      tmp.Clear;
-      tmp.LoadFromFile(FileName);
 
-    frage:=explode('|', tmp[0], 3);
-    ttt:=explode('[]', frage[0]+'[][]', 0);
-    Memo1.Text:=''; memo1.Lines.add('');memo1.Lines.add('');memo1.Lines.add('');
-    Memo1.Lines[0]:=ttt[0];Memo1.Lines[1]:=ttt[1];Memo1.Lines[2]:=ttt[2];
-     // Memo1.Text:=frage[1];
-      Memo2.Text:='';            Memo2.Lines.Add('');
-      Memo2.Lines.Add('');
-      Memo2.Lines.Add('');
-
-       label5.caption:='0';
-
-    a:=TStringlist.Create;
-    b:=TStringlist.Create;
-    tmp.LoadFromFile(FileName);
-    frage:=explode('|', tmp[0], 3);
-  //  Memo1.Text:=frage[1];
-        ttt:=explode('[]', frage[0]+'[][]', 0);
-    Memo1.Text:=''; memo1.Lines.add('');memo1.Lines.add('');memo1.Lines.add('');
-    Memo1.Lines[0]:=ttt[0];Memo1.Lines[1]:=ttt[1];Memo1.Lines[2]:=ttt[2];
-    StaticText7.Caption:=inttostr(tmp.Count);
-
-   a.LoadFromFile(path+':fehler_'+frage[2]+'.csv');
-
-   for c := 0 to a.Count - 1 do begin
-    e:=explode('|', a[c], 5);
-    b.add(e[0]+'|'+e[1]+'|'+frage[2]);
-   end;
-
-   if b.IndexOf(tmp[0]) <> -1 then begin
-      z:=b.IndexOf(tmp[0]);
-      f:=explode('|', a[z], 3);
-      d:=strtoint(f[2]);
-      Label5.Caption:=inttostr(d);
-      a.Free;
-      b.Free;
-   end;
-    if StaticText7.Caption = StaticText9.Caption then
-       begin
-       StaticText9.Caption:='0';
-       StaticText8.Caption:=inttostr(strtoint(StaticText8.Caption)+1);
-       end;
-end
-       else
+    Memo2.Text:='';
+     inc(iii);
+     label4.Caption:=inttostr(iii)+'/'+max;
+      end;
+      str:=clearSTlist(str);
+       if str.Text = '' then
         begin
+        timer1.enabled:=false;
         Memo1.Text:='';
-        Memo2.Text:='';          Memo2.Lines.Add('');
-      Memo2.Lines.Add('');
-        Memo2.Lines.Add('');
-        StaticText7.Caption:='0';
-        StaticText8.Caption:='1';
-        StaticText9.Caption:='0';
-        Form4.Top:=Form9.Top;
-        Form4.Left:=Form9.Left;
-        Form4.Show;
-        Form9.Hide;
-        end;
- BitBtn1.Visible:=False;
-             BitBtn3.Visible:=False;
-             Button1.Visible:=True;
+        Memo2.Text:='';
 
+
+        Form1.Top:=Top;
+        Form1.Left:=Left;
+        Form1.Show;
+        Hide;
+        end;
+
+end else begin
+
+tar := explode('[]',words[isc2],0);
+     Memo2.Lines[0]:=tar[0];
+     for i2:=1 to high(tar) do Memo2.Lines.add(tar[i2]);
+end;
+
+{t:=True;t2:=True;
+ label2.canvas.font.Size:=memo1.font.size;
+
+if (abs( label2.Canvas.TextWidth(Memo1.Lines[0])+8) >= abs(memo1.width)) then
+    Memo1.ScrollBars:=ssHorizontal else
+       t:=False;
+
+       if Memo1.Height <= (Memo1.Lines.Count) * abs(Memo1.Font.Height) then
+    Memo1.ScrollBars := ssVertical else
+         t2:=False;
+  }
+//if (t2=False) and (t=False) then     Memo1.ScrollBars := ssNone;
+
+    
+end;
+procedure VerticalAlignMemo(MyMemo: TMemo);
+var
+  R: Trect;
+  LineHeight, LineTop: integer;
+  TmpLabel: TLabel;
+  TmpString: string;
+  TmpCnt: integer;
+  TmpControl: TWinControl;
+begin
+  TmpLabel := TLabel.Create(NIL);
+  TmpLabel.Parent := form1;
+  TmpLabel.Visible := False;
+  TmpLabel.Font.Assign(MyMemo.Font);
+  LineHeight := TmpLabel.Canvas.TextHeight('T');
+  TmpLabel.Free;
+
+  TmpString := MyMemo.Text;
+  LineTop := Trunc(((MyMemo.Height - 4) / 2) - (LineHeight / 2));
+  TmpCnt := 1;
+  while pos(#13, TmpString) > 0 do
+  begin
+    TmpString := Copy(TmpString, pos(#13, TmpString) + 1, Length(TmpString));
+    TmpCnt := TmpCnt + 1;
+    if (TmpCnt * (LineHeight / 2)) <= (MyMemo.Height / 2) then
+      LineTop := Trunc(((MyMemo.Height - 4) / 2) - (TmpCnt * (LineHeight / 2)));
+  end;
+
+  R := Rect(1, LineTop, MyMemo.Width - 2, MyMemo.Height);
+
+  SendMessage(MyMemo.Handle, EM_SETRECTNP, 0, LongInt(@R));
+  SendMessage(MyMemo.Handle, EM_SCROLLCARET, 0, 0);
+
+  TmpControl := MyMemo.Parent;
+  while TmpControl.HasParent = True do
+    TmpControl := TmpControl.Parent;
+  if TmpControl.Visible = True then
+    MyMemo.Repaint;
+end;
+procedure TForm9.Memo1Change(Sender: TObject);
+begin
+  VerticalAlignMemo(Memo1);
+end;
+
+procedure TForm9.Memo2Change(Sender: TObject);
+begin
+ VerticalAlignMemo(Memo2);
+end;
+
+procedure TForm9.Memo2WndProc(var Msg: TMessage);
+begin
+  if Msg.Msg = WM_SETFOCUS then
+  begin
+    HideCaret(Memo2.Handle); // Cursor verstecken
+    Msg.Result := 0;
+  end else
+    FWndProc2(Msg); // alte Fensterproceure aufrufen
+end;
+
+procedure TForm9.Action1Execute(Sender: TObject);
+begin
+Form1.Button4.Click;
 end;
 
 procedure TForm9.BitBtn2Click(Sender: TObject);
 begin
+timer1.enabled:=false;
         Memo1.Text:='';
         Memo2.Text:='';
-            Memo2.Lines.Add('');
-      Memo2.Lines.Add('');
-        Memo2.Lines.Add('');
-        StaticText7.Caption:='0';
-        StaticText8.Caption:='1';
-        StaticText9.Caption:='0';
-        Form4.Top:=Form9.Top;
-        Form4.Left:=Form9.Left;
-                Button1.Visible:=True;
-        BitBtn1.Visible:=False;
-        BitBtn3.Visible:=False;
-        Form4.Show;
+
+        Form1.Top:=Form9.Top;
+        Form1.Left:=Form9.Left;
+
+        Form1.Show;
         Form9.Hide;
 end;
-
-procedure TForm9.BitBtn3Click(Sender: TObject);
- var   str, tmp, ch, f_l, fl, a, b, ab:TStringlist;
-        loesung, frage, cache, e, f,tar,ttt: TArray;
-        fals: String;
-        i, zeile, z, c, d:Integer;
-begin
-
-    tmp := TStringList.Create;
-    f_l:= TSTringList.Create;
-    fl:=TStringList.Create;
-    str := TStringList.Create;
-    ch := TStringList.Create;
-    a:=TStringlist.Create;
-    b:=TStringlist.Create;
-    ab:=TStringlist.Create;
-    str.LoadFromFile(FileName);
-
-    loesung:=explode('|', str[0],3);
-
-   if form1.ende=true then begin ttt := explode('|', str[0], 0);
-            str[0]:=ttt[1]+'|'+ttt[0]+'|'+ttt[2];  end;
-        tmp.LoadFromFile(path+':fehler_'+loesung[2]+'.csv');
-       // showmessage(tmp.text);
-          for i := 0 to tmp.Count - 1 do   begin
-          // EN|DE|F
-           cache := explode('|', tmp[i], 3);
-           f_l.Add(cache[0]+'|'+cache[1]+'|'+loesung[2]);
-           fl.Add(cache[0]+'|'+cache[1]+'|'+cache[2]);
-          end;
-          // showmessage(f_l.text);
-          // showmessage(fl.text);
-          if Statictext8.Caption = '1' then    begin
-        
-         if f_l.IndexOf(str[0]) <> -1 then
-          begin
-          Zeile:=f_l.IndexOf(str[0]);
-          cache:=explode('|', fl[zeile],5);
-          fals:=cache[0]+'|'+cache[1]+'|'+inttostr(strtoint(cache[2])+2);
-          fl.delete(zeile);
-          fl.Add(fals);
-          end else begin
-             if form1.ende=true then begin fl.add(loesung[1]+'|'+loesung[0]+'|2');end
-             else fl.add(loesung[0]+'|'+loesung[1]+'|2');
-          end;
-        tmp.Clear;
-        tmp:=fl;
-        //showmessage(fl.text);
-        tmp.SaveToFile(path+':fehler_'+loesung[2]+'.csv');
-        tmp.Clear;
-       
-         end;
-
-
-        ch.LoadFromFile(Filecache);
-        if ch.IndexOf(str[0])=-1 then ch.Add(str[0]);
-        ch.SaveToFile(Filecache);
-        if form1.ende = true then begin ttt := explode('|', str[0], 0);
-            str[0]:=ttt[0]+'|'+ttt[1]+'|'+ttt[2]; end;
-        str.Add(str[0]);
-
-
-     Edit2.Text:='0';
-     str.Delete(0);
-     str.SaveToFile(FileName);
-
-      if str.Count <> 0 then
-      begin
-
-      str.Clear;
-      tmp.Clear;
-      tmp.LoadFromFile(FileName);
-
-    frage:=explode('|', tmp[0], 3);
-    ttt:=explode('[]', frage[0]+'[][]', 0);
-    Memo1.Text:=''; memo1.Lines.add('');memo1.Lines.add('');memo1.Lines.add('');
-    Memo1.Lines[0]:=ttt[0];Memo1.Lines[1]:=ttt[1];Memo1.Lines[2]:=ttt[2];
-     // Memo1.Text:=frage[1];
-      Memo2.Text:='';            Memo2.Lines.Add('');
-      Memo2.Lines.Add('');
-      Memo2.Lines.Add('');
-
-       label5.caption:='0';
-
-    a:=TStringlist.Create;
-    b:=TStringlist.Create;
-    tmp.LoadFromFile(FileName);
-    frage:=explode('|', tmp[0], 3);
-  //  Memo1.Text:=frage[1];
-        ttt:=explode('[]', frage[0]+'[][]', 0);
-    Memo1.Text:=''; memo1.Lines.add('');memo1.Lines.add('');memo1.Lines.add('');
-    Memo1.Lines[0]:=ttt[0];Memo1.Lines[1]:=ttt[1];Memo1.Lines[2]:=ttt[2];
-    StaticText7.Caption:=inttostr(tmp.Count);
-
-   a.LoadFromFile(path+':fehler_'+frage[2]+'.csv');
-
-   for c := 0 to a.Count - 1 do begin
-    e:=explode('|', a[c], 5);
-    b.add(e[0]+'|'+e[1]+'|'+frage[2]);
-   end;
-
-   if b.IndexOf(tmp[0]) <> -1 then begin
-      z:=b.IndexOf(tmp[0]);
-      f:=explode('|', a[z], 3);
-      d:=strtoint(f[2]);
-      Label5.Caption:=inttostr(d);
-      a.Free;
-      b.Free;
-   end;
-
-StaticText9.Caption:=inttostr(strtoint(StaticText9.Caption)+1);
- if StaticText7.Caption = StaticText9.Caption then
-       begin
-       StaticText9.Caption:='0';
-       StaticText8.Caption:=inttostr(strtoint(StaticText8.Caption)+1);
-       end;
- end
-       else
-        begin
-        Memo1.Text:='';
-        Memo2.Text:='';          Memo2.Lines.Add('');
-      Memo2.Lines.Add('');
-        Memo2.Lines.Add('');
-        StaticText7.Caption:='0';
-        StaticText8.Caption:='1';
-        StaticText9.Caption:='0';
-        Form4.Top:=Form9.Top;
-        Form4.Left:=Form9.Left;
-        Form4.Show;
-        Form9.Hide;
-        end;
- BitBtn1.Visible:=False;
-             BitBtn3.Visible:=False;
-             Button1.Visible:=True;
-end;
-
-procedure TForm9.Button1Click(Sender: TObject);
- var   str, tmp, ch, f_l, fl, a, b, ab:TStringlist;
-        loesung, frage, cache, e, f,tar,ttt: TArray;
-        fals: String;
-        i, zeile, z, c, d:Integer;
-begin
-    str := TStringList.Create;
-    str.LoadFromFile(FileName);
-    loesung:=explode('|', str[0],3);
-     tar := explode('[]',loesung[1]+'[]-[]-',0);
-     if tar[0] <> '' then begin
-     Memo2.Lines[0]:=tar[0];
-     end;
-      if tar[1] <> '-' then begin
-      Memo2.Lines[1]:=tar[1];
-      end;
-             if tar[2] <> '-' then begin
-             Memo2.Lines[2]:=tar[2];
-             end;
-
-             BitBtn1.Visible:=True;
-             BitBtn3.Visible:=True;
-             Button1.Visible:=False;
-              if StaticText7.Caption = StaticText9.Caption then
-       begin
-       StaticText9.Caption:='0';
-       StaticText8.Caption:=inttostr(strtoint(StaticText8.Caption)+1);
-       end;
-    end;
 
 procedure TForm9.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
@@ -390,54 +265,45 @@ end;
 
 procedure TForm9.FormCreate(Sender: TObject);
 begin
+ii:=0;
 Memo1.Text:='';
 Memo2.Text:='';
 FileName:=Form1.FileName;
 Filecache:=Form1.FileCache;
 Path:=Form1.Path;
+memo1.BorderStyle:=bsnone;
+str:=Tstringlist.Create;
+filecachesl:=Tstringlist.Create;
+  FWndProc := Memo1.WindowProc; // alte Fensterproceure merken
+  Memo1.WindowProc := MemoWndProc; // Fensterproceure auf eigene Fensterprocedure umbiegen
+   FWndProc2 := Memo2.WindowProc; // alte Fensterproceure merken
+  Memo2.WindowProc := Memo2WndProc; // Fensterproceure auf eigene Fensterprocedure umbiegen
+  Image1.Picture:=Form1.Image1.Picture;
+end;
+
+procedure TForm9.FormHide(Sender: TObject);
+begin
+timer1.enabled:=false;
 end;
 
 procedure TForm9.FormShow(Sender: TObject);
-var tmp, ch, a, b:TStringlist;
-    frage, e, f, ttt:TArray;
-    c, d, z:Integer;
+var
+    ttt:TArray;
+    i2:Integer;
 begin
-    tmp := TStringList.Create;
-    a:=TStringlist.Create;
-    b:=TStringlist.Create;
-    tmp.LoadFromFile(FileName);
-    ch:=TStringList.Create;
-    ch.SaveToFile(Filecache);
-    frage:=explode('|', tmp[0], 3);
-    ttt:=explode('[]', frage[0]+'[][]', 0);
-    Memo1.Text:=''; memo1.Lines.add('');memo1.Lines.add('');memo1.Lines.add('');
+if form1.ischanged=True then begin isc:=0; isc2:=1;end
+   else begin isc := 1;isc2:=0;  end;
+     ii:=0;
+   str.LoadFromFile(FileName);
+    words:=explode('|', str[0], 0);
+    ttt:=explode('[]', words[isc], 0);
+    Memo1.Text:='';
     Memo1.Lines[0]:=ttt[0];
-    Memo1.Lines[1]:=ttt[1];
-    Memo1.Lines[2]:=ttt[2];
-    StaticText7.Caption:=inttostr(tmp.Count);
-
-   a.LoadFromFile(path+':fehler_'+frage[2]+'.csv');
-
-   for c := 0 to a.Count - 1 do begin
-    e:=explode('|', a[c], 5);
-    b.add(e[0]+'|'+e[1]+'|'+frage[2]);
-   end;
-
-   if b.IndexOf(tmp[0]) <> -1 then begin
-      z:=b.IndexOf(tmp[0]);
-      f:=explode('|', a[z], 3);
-      d:=strtoint(f[2]);
-      Label5.Caption:=inttostr(d);
-      a.Free;
-      b.Free;
-   end;
-
-    tmp.Free;
-    ch.Free;
+  for i2:=1 to high(ttt) do Memo1.lines.add(ttt[i2]);
     Memo2.Text:='';
-    Memo2.Lines.Add('');
-    Memo2.Lines.Add('');
-    Memo2.Lines.Add('');
+    max:=inttostr(str.count); iii:=1;
+    timer1.enabled:=true;
+            label4.Caption:=inttostr(iii)+'/'+max;
                      end;
 
 end.

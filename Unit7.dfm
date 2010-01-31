@@ -6,7 +6,7 @@ object Form7: TForm7
   ClientHeight = 244
   ClientWidth = 434
   Color = clBtnFace
-  Constraints.MaxHeight = 280
+  Constraints.MaxHeight = 282
   Constraints.MaxWidth = 450
   Constraints.MinHeight = 280
   Constraints.MinWidth = 450

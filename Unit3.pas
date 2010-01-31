@@ -15,18 +15,13 @@ type
     Timer1: TTimer;
     Label1: TLabel;
     Image1: TImage;
-    Timer2: TTimer;
     Timer3: TTimer;
     procedure Timer1Timer(Sender: TObject);
-    procedure Timer2Timer(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Timer3Timer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
     { Private-Deklarationen }
-    ok:Boolean;
-    zpmpath:String;
-    ZPMActive, ZPMEnergy:Integer;
   public
     { Public-Deklarationen }
     muri:Boolean;
@@ -38,7 +33,7 @@ var
 implementation
 
 uses Unit1, Unit2, Unit4, FastStrings, Unit10, Unit11, Unit6, Unit7, Unit8,
-  Unit12, Unit13;
+  Unit12, Unit13, Unit9;
 
 {$R *.dfm}
 function xMessageDlg(const Msg: string; DlgType : TMsgDlgType; Buttons : TMsgDlgButtons; Captions: array of string) : Integer;
@@ -69,32 +64,6 @@ begin
     end;
   end;
   Result := aMsgDlg.ShowModal;
-end;
-function minus(param:Integer): Boolean;
-var ini, ini2:TiniFile;
-     tmp:Integer;
-     e:Boolean;
-     pp:String;
-begin
-e:=True;
-pp:=form3.zpmpath;
-with TForm1 do begin
-
-ini:=TIniFile.create(pp);
-if (ini.ReadInteger('ZPM 1','Active', 0) = 1)and(e = true) then
-begin
-ini2:=TIniFile.create(pp);tmp:=ini2.ReadInteger('ZPM 1','Energy', 0);ini2.Free; if (tmp-param >=0) then begin ini.WriteInteger('ZPM 1','Energy', tmp-param); e:=false; end else e:=true;
-end;
-       if (ini.ReadInteger('ZPM 2','Active', 0) = 1)and(e = true) then
-       begin
-       ini2:=TIniFile.create(pp);tmp:=ini2.ReadInteger('ZPM 2','Energy', 0);ini2.Free; if (tmp-param >=0) then begin ini.WriteInteger('ZPM 2','Energy', tmp-param); e:=false; end else e:=true;
-       end;
-         if (ini.ReadInteger('ZPM 3','Active', 0) = 1)and(e = true) then
-         begin ini2:=TIniFile.create(pp);tmp:=ini2.ReadInteger('ZPM 3','Energy', 0);ini2.Free; if (tmp-param >=0) then begin ini.WriteInteger('ZPM 3','Energy', tmp-param); e:=false; end else e:=true;
-         end;
-ini.Free;
-end;
-Result:=e;
 end;
 function GetProcessID(Exename: string): DWORD;
 var
@@ -217,20 +186,14 @@ var
   Drive: Char;
   Flag: Integer;
   erg : integer;
-   ini:TiniFile;
-    dat:string;
-    exepath:String;
-    Snap: THandle;
-    ProcessE: TProcessEntry32;
-    modh: THandle;
-    ModuleE: TModuleEntry32;
 begin
-     muri:=False;
- { label1.Caption:=datetimetostr(Date+incsecond(Time,-10));
+
+muri:=False;
+{  label1.Caption:=datetimetostr(Date+incsecond(Time,-10));
 
   Timer1.Enabled:=True;
   exit;
-  ok:=True;}
+  ok:=True;
 
   {Meldung eines kritischen Systemfehlers vehindern}
   ErrorMode := SetErrorMode(SEM_FailCriticalErrors);
@@ -241,7 +204,7 @@ IF fileexists('GemeindeMuri.lic') then begin
   Timer1.Enabled:=True;
   exit;
 end;
-
+ muri:=false;
 
  label1.Caption:=datetimetostr(Date+incsecond(Time,3));
    flag:=0;
@@ -251,7 +214,7 @@ end;
 
          begin
               if((ParamStr(0) = GetSpecialFolder(Handle, 38)+'\ELP\ELP_cd.exe'))
-              OR((ZPMActive > 0)AND(ZPMEnergy>10))then begin
+              then begin
                     Timer1.Enabled:=True;
                     label1.Caption:=datetimetostr(Date+incsecond(Time,3));
                     exit;
@@ -300,19 +263,14 @@ end;
 procedure TForm3.Timer1Timer(Sender: TObject);
 var
   stopTime: TDateTime;
-  ini:TIniFile;
 begin
-Timer2Timer(Sender);
  stopTime := strtodatetime(label1.caption);
 
  if Now >= stopTime then begin   {
  Timer1.Enabled:=false;
  Form1.Top:=Form3.Top;
  Form1.Left:=Form3.Left;}
- Timer2.Enabled:=False;
-  if (ZPMActive<>0)and( minus(10) = true) then        begin
-  showmessage('Zero Ponit Modul ist zu sehr abgenutzt!');
-  end else begin
+
  Timer1.Enabled:=False;
 
 
@@ -326,52 +284,11 @@ Timer2Timer(Sender);
   Application.CreateForm(TForm11, Form11);
   Application.CreateForm(TForm12, Form12);
   Application.CreateForm(TForm13, Form13);
-
+  Application.CreateForm(TForm9, Form9);
 
  Form1.Show;
- Form3.Hide;   end;
+ Form3.Hide;  
  end;
-
-end;
-
-procedure TForm3.Timer2Timer(Sender: TObject);
-var
-   ini:TiniFile;
-    dat:string;
-    exepath:String;
-    Snap: THandle;
-    ProcessE: TProcessEntry32;
-    modh: THandle;
-    ModuleE: TModuleEntry32;
-begin
-if ok = true then  begin
-
- Snap := CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-  try
-    ProcessE.dwSize := SizeOf(ProcessE);
-    if Process32First(Snap, ProcessE) then
-      begin
-      modh:=CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetProcessID('ZPMs.exe'));
-        if (modh <> 0) then
-        begin
-           if Module32First(modh, ModuleE) then exepath:=ModuleE.szExePath;
-           CloseHandle(modh);
-          end;
-      end;
-       zpmpath:=GetSpecialFolder(Handle, CSIDL_PERSONAL)+'\ZPM.txt'+':ZPM.ini';
-       if(zpmpath<>':ZPM.ini')then ok:=False;
-          finally
-
-       end;   end;
-  if ok = false then begin
-ini:=TIniFile.create(ZPMPath);
-ZPMActive:=ini.ReadInteger('ZPMs','Active',0);
-ZPMEnergy:=ini.ReadInteger('ZPMs','Energy',0);
-ini.Free;
-if ZPMActive<0 then  ZPMActive:=0;
-if ZPMEnergy<0 then  ZPMEnergy:=0;
-
-end;
 
 end;
 

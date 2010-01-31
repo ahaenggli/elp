@@ -17,8 +17,8 @@ object Form11: TForm11
   PixelsPerInch = 96
   TextHeight = 13
   object Image1: TImage
-    Left = -16
-    Top = -36
+    Left = -8
+    Top = -30
     Width = 450
     Height = 400
     Center = True
@@ -180,8 +180,8 @@ object Form11: TForm11
     OnClick = Button1Click
   end
   object Memo1: TMemo
-    Left = 32
-    Top = 8
+    Left = 30
+    Top = 10
     Width = 370
     Height = 321
     Lines.Strings = (
@@ -192,25 +192,6 @@ object Form11: TForm11
     Visible = False
     WantTabs = True
     WordWrap = False
-  end
-  object Button2: TButton
-    Left = 168
-    Top = 331
-    Width = 75
-    Height = 25
-    Caption = 'Test drucken'
-    TabOrder = 8
-    Visible = False
-    OnClick = Button2Click
-  end
-  object Button3: TButton
-    Left = 8
-    Top = 333
-    Width = 113
-    Height = 25
-    Caption = 'zu den Einstellungen'
-    TabOrder = 9
-    OnClick = Button3Click
   end
   object BitBtn2: TBitBtn
     Left = 374
@@ -295,11 +276,24 @@ object Form11: TForm11
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
   end
-  object PrintDialog: TPrintDialog
-    Ctl3D = False
-    Copies = 1
-    Left = 400
-    Top = 32
+  object Button3: TButton
+    Left = 8
+    Top = 333
+    Width = 113
+    Height = 25
+    Caption = 'zu den Einstellungen'
+    TabOrder = 9
+    OnClick = Button3Click
+  end
+  object Button2: TButton
+    Left = 168
+    Top = 331
+    Width = 75
+    Height = 25
+    Caption = 'Test drucken'
+    TabOrder = 8
+    Visible = False
+    OnClick = Button2Click
   end
   object ActionList1: TActionList
     Left = 264
@@ -309,5 +303,9 @@ object Form11: TForm11
       ShortCut = 112
       OnExecute = Action1Execute
     end
+  end
+  object PrintDialog: TPrintDialog
+    Left = 400
+    Top = 208
   end
 end

@@ -3,9 +3,9 @@ unit Unit11;
 interface
 
 uses
-  Printers,
+  
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, Math, jpeg, ExtCtrls, ActnList;
+  Dialogs, StdCtrls, Buttons, Math, jpeg, ExtCtrls, Printers,ActnList;
 
 type
   TForm11 = class(TForm)
@@ -22,9 +22,9 @@ type
     Button2: TButton;
     Button3: TButton;
     BitBtn2: TBitBtn;
-    PrintDialog: TPrintDialog;
     ActionList1: TActionList;
     Action1: TAction;
+    PrintDialog: TPrintDialog;
     procedure Button3Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
@@ -37,7 +37,7 @@ type
   private
     { Private-Deklarationen }
         BlattBreite, BlattHoehe,
-    EtikettBreite, EtikettHoehe,
+
     Rand, ZeilenHoehe,i : INTEGER;
     str:TStringlist;
   public
@@ -169,8 +169,8 @@ end;
 procedure TForm11.Button1Click(Sender: TObject);
 var vs:Boolean;
     tmp:TStringlist;
-    m,z,z2,u:Integer;
-    path,strtmp,a,b:String;
+    z,z2,u,i2:Integer;
+    path,a,b:String;
     tar:TArray;
 begin
 
@@ -194,20 +194,13 @@ str := TStringList.Create;
 tmp := TStringList.Create;
 
 
-for z:=strtoint(CB1.text) to strtoint(CB2.text) do begin
-tmp.LoadFromFile(path+':'+inttostr(z)+'.csv');
+for i2 := 0 to high(form1.vocis) do begin
+  if  (strtoint(form1.vocis[i2].lektion) >= strtoint(cb1.text)) and(strtoint(form1.vocis[i2].lektion) <= strtoint(cb2.text)) then begin
+  str.add(form1.Vocis[i2].Franz+'|'+form1.Vocis[i2].Deutsch+'|'+form1.Vocis[i2].Lektion+'|'+form1.Vocis[i2].Fehler+'|'+form1.Vocis[i2].ID);
+  end;
+end;
 
-
-   for m := 0 to tmp.Count - 1 do  begin
-
-   strtmp:=tmp[m];
-   str.add(strtmp);
-   end;
-
-    
-    end;
-
-for z2 := 0 to ZS(1, 100) do         begin
+for z2 := 0 to ZS(1, 10000) do         begin
 
 for z := 0 to str.Count-1 do begin
  u := random(str.Count-1);
@@ -229,8 +222,7 @@ tar[1]:=StringReplace(tar[1], '[]', ' // ', [rfReplaceAll]);
 Memo1.Lines.Add(''+tar[1]+#10+'     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _');
 memo1.Lines.add('');
 
-//tar:=explode('|', Str[z],0);
-//Memo1.lines.add(tar[0]);
+
 end;
  tmp.Free;
 
@@ -238,167 +230,120 @@ end;
 
 
 function loesungsblatt(loesung:Boolean):Boolean;
-var
-    XX,yy,tmp,ii,al,seitenzahl : INTEGER;
-    sts:TStringlist;
-    letters,txt,s,dan:String;
-    tar:TArray;
 begin
-if loesung = true then  begin
-with Form11 do begin
-
-
-sts:=TStringList.Create;
-sts.Add(' _-$-_ ');
-
-for al:=0 to str.count-1 do begin
-  sts.add(str[al]);
-end;
-
-Seitenzahl:= (strtoint(Edit1.Text) div 23);
-xx :=  ((Printer.PageWidth DIV 3)div 10);
-
-   Printer.Canvas.Font.Name := 'Times New Roman';//'Arial';
-   BlattBreite := Printer.PageWidth;
-   BlattHoehe := Printer.PageHeight;
-   ZeilenHoehe := ((Printer.PageHeight DIV 6) DIV 8);
-   Printer.Canvas.Font.Color := clblack;
-   Printer.Canvas.Font.Size := 12;
-   Printer.Title:='Cadac - Test';
-
-         PrintDialog.Copies:=1;
-         PrintDialog.Options:=[poPageNums];
-
-if PrintDialog.Execute then begin
- tmp:=1;
- Printer.BeginDoc;   WITH Printer.Canvas DO BEGIN
-
- for ii := 0 to strtoint(edit1.text) do begin
-if sts[ii]=' _-$-_ ' then    begin
-dan:='Lektion '+cb1.Text+' bis '+cb2.Text+'         LOESUNGEN ---- LOESUNGEN ---- LOESUNGEN';
-TextOut (BlattBreite-Printer.Canvas.TextWidth(dan),Yy+Zeilenhoehe div 2, dan);
-end;  if (sts[ii]<>' _-$-_ ')and(sts[ii]<>'') then begin
-
- if(tmp<ceil(ii/23)) then begin Printer.NewPage; Yy:=rand;          end;
- tmp:=ceil(ii/23);
-    letters:='-------------------------------';
-    letters:=letters+'---------------------------------------------------------------';
-             tar:=explode('|', sts[ii], 0);
-             tar[1]:=StringReplace(tar[1], '[]', ' // ', [rfReplaceAll]);
-             tar[1]:=StringReplace(tar[1], #13, '', [rfReplaceAll]);
-
-yy:=Yy+ZeilenHoehe; TextOut (Xx,Yy+ZeilenHoehe, inttostr(ii)+') '+tar[1]);
-yy:=Yy+ZeilenHoehe; TextOut (12*Xx,Yy+ZeilenHoehe, letters);
-                    TextOut (12*Xx,Yy+ZeilenHoehe-20, tar[0]);
-
-Printer.Canvas.MoveTo (0, Yy+ZeilenHoehe+ZeilenHoehe div 2+5);
-Printer.Canvas.LineTo (BlattBreite, Yy+ZeilenHoehe+ZeilenHoehe div 2+45);
-
-
-   end;
- end;
-
-
-end;Printer.EndDoc;
-
-end;
-
 
 
 end;
-               end;   
 
 
-end;
 procedure TForm11.Button2Click(Sender: TObject);
-   VAR
-    XSpalte, YZeile,
-    Sp, Zl,nr,al,seitenzahl,x,non,nan,ca,ii,nombre,
+var
+  ppix,ppiy,mmx,mmy,hmar,vmar,ls,i:integer;
+      al,ii,
 
-    Xx,Yy,szaktuell,tmp: INTEGER;
+    Yy,tmp,count: INTEGER;
     sts:TStringlist;
-    letters,txt,s,dan:String;
+    letters,dan:String;
     tar:TArray;
-    loesung:Boolean;
 begin
-
-
 sts:=TStringList.Create;
 sts.Add(' _-$-_ ');
 
-for al:=0 to str.count-1 do begin
-  sts.add(str[al]);
-end;
+for al:=0 to str.count-1 do sts.add(str[al]);
 
-Seitenzahl:= (strtoint(Edit1.Text) div 23);
-xx :=  ((Printer.PageWidth DIV 3)div 10);
 
-   Printer.Canvas.Font.Name := 'Times New Roman';//'Arial';
-   BlattBreite := Printer.PageWidth;
+  BlattBreite := Printer.PageWidth;
    BlattHoehe := Printer.PageHeight;
    ZeilenHoehe := ((Printer.PageHeight DIV 6) DIV 8);
-   Printer.Canvas.Font.Color := clblack;
-   Printer.Canvas.Font.Size := 12;
-   Printer.Title:='Cadac - Test';
+     with printer do begin
+     tmp:=1;
+      
+      With Canvas do
+        begin
+      count:=strtointDef(  InputBox('Kopien', 'Wie viele Male soll der Test gedruckt werden?','1'), 1);
+for i := 1 to count do begin
+         BeginDoc;
+          {Establish printer parameters}
+          ppix:=GetDeviceCaps(Handle,LOGPIXELSX);  {Pixels per inch, x direction}
+          ppiy:=GetDeviceCaps(Handle,LOGPIXELSY);  {  "			"  y direction}
+          mmx:=round(ppix/25.4);                   {Pixels per mm, x direction}
+          mmy:=round(ppiy/25.4);                   {	"	"	 y direction}
+          hmar:=mmx*5;                            {Horizontal (left hand) margin}
+          vmar:=mmy*5;                            {Vertical (top) margin}
+          Font.PixelsPerInch:=ppix;                {BUG!}
+          Font.Name:='Times New Roman';
+          {Set font size and style, Print Heading}
+          Font.Size:=14;
+          ls:=textheight('X');                {line spacing = height of the current text.}
+          Font.Size:=12;
+          yy:=vmar;
+          setTextAlign(printer.canvas.handle,TA_LEFT);
 
-
-       s := InputBox('Kopien', 'Wie viele Male soll der Test gedruckt werden?','1');
-
-    if(isnumeric(s)) then   PrintDialog.Copies:=strtoint(s)
-    else PrintDialog.Copies:=1;
-         PrintDialog.Options:=[poPageNums];
-
-if PrintDialog.Execute then begin
- tmp:=1;
- Printer.BeginDoc;   WITH Printer.Canvas DO BEGIN
-
- for ii := 0 to strtoint(edit1.text) do begin
-if sts[ii]=' _-$-_ ' then    begin
-dan:='Lektion '+cb1.Text+' bis '+cb2.Text+'         Datum:________________ Name:_______________ Klasse:____';
-TextOut (BlattBreite-Printer.Canvas.TextWidth(dan),Yy+Zeilenhoehe div 2, dan);
-end;  if (sts[ii]<>' _-$-_ ')and(sts[ii]<>'') then begin
-
- if(tmp<ceil(ii/23)) then begin Printer.NewPage; Yy:=rand;          end;
+for ii := 0 to strtoint(edit1.text) do begin
+  if sts[ii]=' _-$-_ ' then    begin dan:='Lektion '+cb1.Text+' bis '+cb2.Text+'         Datum:________________ Name:_______________ Klasse:____'; TextOut (8*Hmar+Hmar*2,yy, dan);   yy:=yy+ls;end;
+ if (sts[ii]<>' _-$-_ ')and(sts[ii]<>'') then begin
+  if(tmp<ceil(ii/23)) then begin Printer.NewPage;  yy:=vmar;         end;
  tmp:=ceil(ii/23);
-    letters:='-------------------------------';
-    letters:=letters+'---------------------------------------------------------------';
-             tar:=explode('|', sts[ii], 0);
-             tar[1]:=StringReplace(tar[1], '[]', ' // ', [rfReplaceAll]);
-             tar[1]:=StringReplace(tar[1], #13, '', [rfReplaceAll]);
+ letters:='-------------------------------';
+ letters:=letters+'---------------------------------------------------------------';
+ tar:=explode('|', sts[ii], 0);
+ tar[1]:=StringReplace(tar[1], '[]', ' // ', [rfReplaceAll]);
+ tar[1]:=StringReplace(tar[1], #13, '', [rfReplaceAll]);
 
-yy:=Yy+ZeilenHoehe; TextOut (Xx,Yy+ZeilenHoehe, inttostr(ii)+') '+tar[1]);
-yy:=Yy+ZeilenHoehe; TextOut (8*Xx,Yy+ZeilenHoehe, letters);
+ yy:=Yy+ls; TextOut (Hmar,Yy+ls, inttostr(ii)+') '+tar[1]);
+ yy:=Yy+ls; TextOut (8*Hmar*2,Yy+ls, letters);
 
-Printer.Canvas.MoveTo (0, Yy+ZeilenHoehe+ZeilenHoehe div 2+5);
-Printer.Canvas.LineTo (BlattBreite, Yy+ZeilenHoehe+ZeilenHoehe div 2+45);
-
- {Printer.Canvas.MoveTo (BlattBreite-210-10,(Yy+ZeilenHoehe+ZeilenHoehe div 2+5)-20);
- Printer.Canvas.LineTo (BlattBreite-10-10, (Yy+ZeilenHoehe+ZeilenHoehe div 2+5)-20);
- Printer.Canvas.MoveTo (BlattBreite-210-10,(Yy+ZeilenHoehe+ZeilenHoehe div 2+5)-20-180);
- Printer.Canvas.LineTo (BlattBreite-10-10, (Yy+ZeilenHoehe+ZeilenHoehe div 2+5)-20-180);{}
-///////////////////////////////////////
-
-{ Printer.Canvas.MoveTo (BlattBreite-210-9,(Yy+ZeilenHoehe+ZeilenHoehe div 2+5)-20-179);
- Printer.Canvas.LineTo (BlattBreite-210-9, (Yy+ZeilenHoehe+ZeilenHoehe div 2+5)-19);
- Printer.Canvas.MoveTo (BlattBreite-10-9,(Yy+ZeilenHoehe+ZeilenHoehe div 2+5)-20-179);
- Printer.Canvas.LineTo (BlattBreite-10-9, (Yy+ZeilenHoehe+ZeilenHoehe div 2+5)-19);{ }
-
-
-   end;
+ MoveTo (0, Yy+ZeilenHoehe+ls div 2+5);
+ LineTo (BlattBreite, Yy+ls+ls div 2+45);
  end;
-
-
-end;Printer.EndDoc;
-
-              loesung:=False;
-if MessageDlg('Soll ein Lösungsblatt gedruckt werden?', mtConfirmation, [mbyes, mbno], 0) = mrYes then
-begin
-loesung:=True;
 end;
-               loesungsblatt(loesung);
-              end;
+EndDoc;
+end;
 
+if MessageDlg('Soll ein Lösungsblatt gedruckt werden?',mtConfirmation, [mbyes, mbno], 0) = mrYes then begin
+         begindoc;
+          {Establish printer parameters}
+          ppix:=GetDeviceCaps(Handle,LOGPIXELSX);  {Pixels per inch, x direction}
+          ppiy:=GetDeviceCaps(Handle,LOGPIXELSY);  {  "			"  y direction}
+          mmx:=round(ppix/25.4);                   {Pixels per mm, x direction}
+          mmy:=round(ppiy/25.4);                   {	"	"	 y direction}
+          hmar:=mmx*5;                            {Horizontal (left hand) margin}
+          vmar:=mmy*5;                            {Vertical (top) margin}
+          Font.PixelsPerInch:=ppix;                {BUG!}
+          Font.Name:='Times New Roman';
 
+          Font.Size:=14;
+          ls:=textheight('X');                {line spacing = height of the current text.}
+          Font.Size:=12;
+
+yy:=vmar;
+setTextAlign(printer.canvas.handle,TA_LEFT);
+for ii := 0 to strtoint(edit1.text) do begin
+  if sts[ii]=' _-$-_ ' then    begin dan:='Lektion '+cb1.Text+' bis '+cb2.Text+'         LOESUNGEN ---- LOESUNGEN ---- LOESUNGEN';TextOut (8*Hmar+Hmar*4,yy, dan);   yy:=yy+ls;end;
+ if (sts[ii]<>' _-$-_ ')and(sts[ii]<>'') then begin
+  if(tmp<ceil(ii/23)) then begin Printer.NewPage;  yy:=vmar; end;
+ tmp:=ceil(ii/23);
+ letters:='-------------------------------';
+ letters:=letters+'---------------------------------------------------------------';
+ tar:=explode('|', sts[ii], 0);
+ tar[1]:=StringReplace(tar[1], '[]', ' // ', [rfReplaceAll]);
+ tar[1]:=StringReplace(tar[1], #13, '', [rfReplaceAll]);
+ tar[0]:=StringReplace(tar[0], '[]', ' // ', [rfReplaceAll]);
+ tar[0]:=StringReplace(tar[0], #13, '', [rfReplaceAll]);
+
+ yy:=Yy+ls; TextOut (Hmar,Yy+ls, inttostr(ii)+') '+tar[1]);
+ yy:=Yy+ls; TextOut (8*Hmar*2,Yy+ls, letters);
+ TextOut (8*Hmar*2,Yy+ls-80, tar[0]);
+ MoveTo (0, Yy+ZeilenHoehe+ls div 2+5);
+ LineTo (BlattBreite, Yy+ls+ls div 2+45);
+ end;
+end;
+enddoc;
+end;
+
+        end;
+
+    end;
 end;
 
 
@@ -420,6 +365,8 @@ Edit1.Visible:=VS;
 Button1.Visible:=VS;
 end;
 
+
+
 procedure TForm11.Edit1KeyPress(Sender: TObject; var Key: Char);
 begin
 if Key=#13 then Button1.Click;
@@ -437,6 +384,8 @@ end;
 
 procedure TForm11.FormShow(Sender: TObject);
 begin
+CB1.Items:=FOrm1.Edit1.Items;
+CB2.Items:=FOrm1.Edit1.Items;
 CB1.Itemindex:=Form1.Edit1.Itemindex;
 CB2.ItemIndex:=Form1.Edit2.Itemindex;
 Memo1.Text:='';

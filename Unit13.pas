@@ -22,11 +22,13 @@ var
 
 implementation
 
+uses Unit1;
+
 {$R *.dfm}
 
 procedure TForm13.BitBtn1Click(Sender: TObject);
 begin
-RichEdit1.Print('Cadac Wörter');
+RichEdit1.Print(form1.name+' Wörter');
 Close;
 end;
 

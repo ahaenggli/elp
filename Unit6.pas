@@ -109,15 +109,12 @@ Form6.Hide;
 end;
 
 procedure TForm6.Button1Click(Sender: TObject);
-var StringList:TStringList;
-    posi,i,le, medit0:integer;
-    t:string;
+var
+    medit0,ii:integer;
     medit1, medit2, medit3:TEdit;
-    tar:TArray;
     i2:Word;
 begin
   path:=Form1.Path;
-  StringList := TStringList.Create;
   { Medit1.Free;
    Medit2.Free;
    Medit3.Free;  }
@@ -126,23 +123,18 @@ begin
 
   if(Edit1.Text = '''') then begin showmessage('Bitte eine Eingabe machen...'); exit;end;
 
-  try
+
 
   for i2:=ComponentCount-1 downto 0 do If SmartPos('medit',Components[i2].Name, false)<>0 Then Components[i2].Free;
   medit0:=Edit2.Top;
 
-  for le := strtoint(Form1.edit1.Items[0]) to strtoint(Form1.edit1.Items[Form1.edit2.Items.Count-1]) do begin
-    StringList.LoadFromFile(path+':'+inttostr(le)+'.csv');
-    //delete(s, 1, pos('<Startwort>', s) + length('<Startwort>') - 1);
+for ii := 0 to high(form1.vocis) do begin
 
-   for i := 0 to stringlist.Count-1  do  begin
-     t:=StringList[i];
+if ((SmartPos(Edit1.Text, form1.vocis[ii].deutsch, False)) <> 0)or
+   ((SmartPos(Edit1.Text, form1.vocis[ii].franz, False)) <> 0)
+then begin
 
-     posi := SmartPos(Edit1.Text, t, False);
 
-     if (posi <> 0) then begin
-
-  tar:=explode('|', t+'| | ', 0);
 
 
   MEdit1:=TEdit.Create(Self); // damit erstellst du dein Editfeld erst...
@@ -150,10 +142,10 @@ begin
   MEdit1.ReadOnly:=True;
   MEdit1.Width:=Edit2.Width;
   Medit1.Height:=Edit2.Height;
-  MEdit1.Name:='Medit1_'+inttostr(le)+'_'+inttostr(i);
+  MEdit1.Name:='Medit1_'+'_'+inttostr(ii);
   Medit1.Top:=Medit0+25;         // und nun die einzelnen Eigenschaften setzen
   Medit1.Left:=Edit2.Left;
-  Medit1.Text:=StringReplace(tar[0], '[]', ' // ', [rfReplaceAll]);
+  Medit1.Text:=StringReplace(form1.vocis[ii].franz, '[]', ' // ', [rfReplaceAll]);
   MEdit1.Font.Name:='Arial';
   Medit1.Font.Size:=10;
   MEdit1.Parent:=Form6; // fehlt bei dir, daher kann dein Edit sonstwo sein
@@ -164,10 +156,10 @@ begin
   MEdit2.ReadOnly:=True;
   MEdit2.Width:=edit3.width;
   Medit2.Height:=edit3.height;
-  MEdit2.Name:='Medit2_'+inttostr(le)+'_'+inttostr(i);
+  MEdit2.Name:='Medit2_'+'_'+inttostr(ii);
   Medit2.Top:=Medit0+25;         // und nun die einzelnen Eigenschaften setzen
   Medit2.Left:=Edit3.Left;
-  Medit2.Text:=StringReplace(tar[1], '[]', ' // ', [rfReplaceAll]);
+  Medit2.Text:=StringReplace(form1.vocis[ii].deutsch, '[]', ' // ', [rfReplaceAll]);
   MEdit2.Font.Name:='Arial';
   Medit2.Font.Size:=10;
   Medit2.Font.Color:=clWhite;
@@ -179,10 +171,10 @@ begin
   MEdit3.ReadOnly:=True;
   MEdit3.Width:=Edit4.Width;
   Medit3.Height:=Edit4.Height;
-  MEdit3.Name:='Medit3_'+inttostr(le)+'_'+inttostr(i);
+  MEdit3.Name:='Medit3_'+'_'+inttostr(ii);
   Medit3.Top:=Medit0+25;         // und nun die einzelnen Eigenschaften setzen
   Medit3.Left:=Edit4.Left;
-  Medit3.Text:=inttostr(le);
+  Medit3.Text:=form1.vocis[ii].lektion;
   MEdit3.Font.Name:='Arial';
   Medit3.Font.Size:=10;
   MEdit3.Parent:=Form6; // fehlt bei dir, daher kann dein Edit sonstwo sein
@@ -190,10 +182,9 @@ begin
   Medit0:=Medit0+25;
         end;
   end;
-   end; 
-  finally
-   StringList.Free;
-  end;
+   
+
+
 
  end;
 

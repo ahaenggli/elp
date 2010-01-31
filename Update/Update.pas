@@ -152,16 +152,16 @@ var      Datei, Ziel:PChar;
 begin
 
 GetDir(0,s);
-    Datei := PCHar('http:\\cadac.trachtengruppe-merenschwand.ch\Cadac\Cadac.exe');
+    Datei := PCHar('http:\\cadac.trachtengruppe-merenschwand.ch\ELPv2\ELP.exe');
 
-      if(FileExists(s+'\Cadac.exe')) then begin
-       DeleteFile(s+'\Cadac.exe');
-       Ziel  := PChar(s+'\Cadac.exe');    // showmessage('12');
+      if(FileExists(s+'\ELP.exe')) then begin
+       DeleteFile(s+'\ELP.exe');
+       Ziel  := PChar(s+'\ELP.exe');    // showmessage('12');
       end;
 
-       if(FileExists(s+'\Cadac_cd.exe')) then begin
-       DeleteFile(s+'\Cadac_cd.exe');
-       Ziel  := PChar(s+'\Cadac_cd.exe'); // showmessage('13');
+       if(FileExists(s+'\ELP_cd.exe')) then begin
+       DeleteFile(s+'\ELP_cd.exe');
+       Ziel  := PChar(s+'\ELP_cd.exe'); // showmessage('13');
        end;
 
 
@@ -215,14 +215,14 @@ int:IBindStatusCallback;
 Path,text:String;
 begin
 
-    Path:=GetSpecialFolder(Handle, CSIDL_PERSONAL)+'\Cadac\Cadac.txt';
-    Datei := 'http:\\cadac.trachtengruppe-merenschwand.ch/Cadac/desc.txt';
+    Path:=GetSpecialFolder(Handle, CSIDL_PERSONAL)+'\ELP\ELP.txt';
+    Datei := 'http:\\cadac.trachtengruppe-merenschwand.ch/ELPv2/desc.txt';
     Ziel  := PChar(path+':desc.txt');
     URLDownloadToFIle(nil,Datei,Ziel,0,int);
     
 memo1.lines.loadfromfile(string(ziel));
 text:=memo1.Text;
-Memo1.Text:='Cadac Update-Grund:';
+Memo1.Text:='ELP Update-Grund:';
 memo1.lines.add('');
 Memo1.Lines.Add(text);
 end;

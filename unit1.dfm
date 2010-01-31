@@ -8,8 +8,8 @@ object Form1: TForm1
   Color = clBtnFace
   Constraints.MaxHeight = 400
   Constraints.MaxWidth = 450
-  Constraints.MinHeight = 400
-  Constraints.MinWidth = 450
+  Constraints.MinHeight = 389
+  Constraints.MinWidth = 442
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -2091,20 +2091,22 @@ object Form1: TForm1
   end
   object ComboBox1: TComboBox
     Left = 135
-    Top = 243
-    Width = 164
+    Top = 241
+    Width = 189
     Height = 21
     AutoComplete = False
     Style = csDropDownList
-    DropDownCount = 10
+    DropDownCount = 20
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ItemHeight = 13
+    ItemIndex = 11
     ParentFont = False
     TabOrder = 1
+    Text = 'W'#246'rtersuche'
     OnChange = ComboBox1Change
     Items.Strings = (
       '--- Schriftlich ---'
@@ -2113,6 +2115,9 @@ object Form1: TForm1
       '--- Visuell ---'
       'Deutsch ----> Englisch'
       'Englisch ----> Deutsch'
+      '--- Vokabelgalerie ---'
+      'Deutsch -------> Englisch'
+      'Englisch -------> Deutsch'
       '--- Sonstiges ---'
       'W'#246'rterliste zeigen'
       'W'#246'rtersuche'
@@ -2134,36 +2139,11 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 2
     Items.Strings = (
-      '0'
       '1'
       '2'
       '3'
       '4'
-      '5'
-      '6'
-      '7'
-      '8'
-      '9'
-      '10'
-      '11'
-      '12'
-      '13'
-      '14'
-      '15'
-      '16'
-      '17'
-      '18'
-      '19'
-      '20'
-      '21'
-      '22'
-      '23'
-      '24'
-      '25'
-      '26'
-      '27'
-      '28'
-      '29')
+      '5')
   end
   object Edit2: TComboBox
     Left = 110
@@ -2181,36 +2161,11 @@ object Form1: TForm1
     ParentFont = False
     TabOrder = 3
     Items.Strings = (
-      '0'
       '1'
       '2'
       '3'
       '4'
-      '5'
-      '6'
-      '7'
-      '8'
-      '9'
-      '10'
-      '11'
-      '12'
-      '13'
-      '14'
-      '15'
-      '16'
-      '17'
-      '18'
-      '19'
-      '20'
-      '21'
-      '22'
-      '23'
-      '24'
-      '25'
-      '26'
-      '27'
-      '28'
-      '29')
+      '5')
   end
   object Button1: TBitBtn
     Left = 38
@@ -2295,20 +2250,6 @@ object Form1: TForm1
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
   end
-  object StaticText2: TStaticText
-    Left = 59
-    Top = 32
-    Width = 349
-    Height = 17
-    Caption = 'ELP (= English learn programme) f'#252'r "New Snapshot Starter".'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = [fsBold]
-    ParentFont = False
-    TabOrder = 5
-  end
   object StaticText3: TStaticText
     Left = 76
     Top = 55
@@ -2321,7 +2262,7 @@ object Form1: TForm1
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
-    TabOrder = 6
+    TabOrder = 5
   end
   object CheckBox1: TCheckBox
     Left = 280
@@ -2335,7 +2276,7 @@ object Form1: TForm1
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
-    TabOrder = 7
+    TabOrder = 6
     OnClick = CheckBox1Click
   end
   object Button2: TButton
@@ -2344,7 +2285,7 @@ object Form1: TForm1
     Width = 75
     Height = 25
     Caption = 'Installieren'
-    TabOrder = 8
+    TabOrder = 7
     OnClick = Button2Click
   end
   object Memo1: TMemo
@@ -2354,18 +2295,18 @@ object Form1: TForm1
     Height = 20
     Lines.Strings = (
       'Memo1')
-    TabOrder = 9
+    TabOrder = 8
     Visible = False
     WantReturns = False
     WordWrap = False
   end
   object BitBtn1: TBitBtn
     Left = 275
-    Top = 331
+    Top = 329
     Width = 73
     Height = 25
     Caption = 'Update'
-    TabOrder = 10
+    TabOrder = 9
     OnClick = BitBtn1Click
     Glyph.Data = {
       E6040000424DE604000000000000360000002800000014000000140000000100
@@ -2409,15 +2350,6 @@ object Form1: TForm1
       FFFFFFFFFFFFB4D9B466B166ACD5ACFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFF}
   end
-  object Button3: TButton
-    Left = 156
-    Top = 164
-    Width = 25
-    Height = 25
-    Caption = '?'
-    TabOrder = 11
-    OnClick = Button3Click
-  end
   object Button4: TButton
     Left = 275
     Top = 300
@@ -2425,13 +2357,36 @@ object Form1: TForm1
     Height = 25
     Action = Action1
     Caption = 'Hilfe'
-    TabOrder = 12
+    TabOrder = 10
   end
   object StaticText4: TStaticText
     Left = 135
     Top = 277
     Width = 4
     Height = 4
+    TabOrder = 11
+  end
+  object Button3: TButton
+    Left = 156
+    Top = 164
+    Width = 25
+    Height = 25
+    Caption = '?'
+    TabOrder = 12
+    OnClick = Button3Click
+  end
+  object StaticText2: TStaticText
+    Left = 59
+    Top = 32
+    Width = 349
+    Height = 17
+    Caption = 'ELP (= English learn programme) f'#252'r "New Snapshot Starter".'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
     TabOrder = 13
   end
   object ActionList1: TActionList
@@ -2442,5 +2397,18 @@ object Form1: TForm1
       ShortCut = 112
       OnExecute = Action1Execute
     end
+  end
+  object ado: TADOTable
+    CursorType = ctStatic
+    EnableBCD = False
+    TableName = '1'
+    Left = 176
+    Top = 312
+  end
+  object Timer1: TTimer
+    Enabled = False
+    OnTimer = Timer1Timer
+    Left = 392
+    Top = 16
   end
 end

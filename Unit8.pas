@@ -46,6 +46,8 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Action1Execute(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
+    procedure Memo1Change(Sender: TObject);
+    procedure Memo2Change(Sender: TObject);
   private
     { Private-Deklarationen }
 FileName,Filecache,Path:String;
@@ -80,10 +82,10 @@ begin
     FWndProc(Msg); // alte Fensterproceure aufrufen
 end;
 procedure TForm8.Timer1Timer(Sender: TObject);
-var
-t,t2:Boolean;
+//var
+//t,t2:Boolean;
 begin
-t:=True;t2:=True;
+{t:=True;t2:=True;
  label2.canvas.font.Size:=memo1.font.size;
 
 if (abs( label2.Canvas.TextWidth(Memo1.Lines[0])+8) >= abs(memo1.width)) then
@@ -93,11 +95,59 @@ if (abs( label2.Canvas.TextWidth(Memo1.Lines[0])+8) >= abs(memo1.width)) then
        if Memo1.Height <= (Memo1.Lines.Count) * abs(Memo1.Font.Height) then
     Memo1.ScrollBars := ssVertical else
          t2:=False;
-
-if (t2=False) and (t=False) then     Memo1.ScrollBars := ssNone;
+  }
+//if (t2=False) and (t=False) then     Memo1.ScrollBars := ssNone;
 
     
 end;
+procedure VerticalAlignMemo(MyMemo: TMemo);
+var
+  R: Trect;
+  LineHeight, LineTop: integer;
+  TmpLabel: TLabel;
+  TmpString: string;
+  TmpCnt: integer;
+  TmpControl: TWinControl;
+begin
+  TmpLabel := TLabel.Create(NIL);
+  TmpLabel.Parent := form1;
+  TmpLabel.Visible := False;
+  TmpLabel.Font.Assign(MyMemo.Font);
+  LineHeight := TmpLabel.Canvas.TextHeight('T');
+  TmpLabel.Free;
+
+  TmpString := MyMemo.Text;
+  LineTop := Trunc(((MyMemo.Height - 4) / 2) - (LineHeight / 2));
+  TmpCnt := 1;
+  while pos(#13, TmpString) > 0 do
+  begin
+    TmpString := Copy(TmpString, pos(#13, TmpString) + 1, Length(TmpString));
+    TmpCnt := TmpCnt + 1;
+    if (TmpCnt * (LineHeight / 2)) <= (MyMemo.Height / 2) then
+      LineTop := Trunc(((MyMemo.Height - 4) / 2) - (TmpCnt * (LineHeight / 2)));
+  end;
+
+  R := Rect(1, LineTop, MyMemo.Width - 2, MyMemo.Height);
+
+  SendMessage(MyMemo.Handle, EM_SETRECTNP, 0, LongInt(@R));
+  SendMessage(MyMemo.Handle, EM_SCROLLCARET, 0, 0);
+
+  TmpControl := MyMemo.Parent;
+  while TmpControl.HasParent = True do
+    TmpControl := TmpControl.Parent;
+  if TmpControl.Visible = True then
+    MyMemo.Repaint;
+end;
+procedure TForm8.Memo1Change(Sender: TObject);
+begin
+  VerticalAlignMemo(Memo1);
+end;
+
+procedure TForm8.Memo2Change(Sender: TObject);
+begin
+ VerticalAlignMemo(Memo2);
+end;
+
 procedure TForm8.Memo2WndProc(var Msg: TMessage);
 begin
   if Msg.Msg = WM_SETFOCUS then
@@ -166,22 +216,33 @@ Form1.Button4.Click;
 end;
 
 procedure TForm8.BitBtn1Click(Sender: TObject);
- var   asl:TStringlist;
- ttt,f:TArray;
-        aslnr:Integer;
+ var
+ ttt:TArray;
+ i2:Integer;
 begin
 if statictext8.Caption = '1' then  begin
 
-asl:=Tstringlist.Create;
-   asl.LoadFromFile(path+':fehler_'+words[2]+'.csv');
-    for aslnr := 0 to asl.Count - 1 do begin
-     if (smartpos(words[0]+'|'+words[1]+'|'+words[3], asl[aslnr], false) = 1) then begin
-      asl[aslnr]:=words[0]+'|'+words[1]+'|'+inttostr((strtoint(words[3])-1));
-      if ((strtoint(words[3])-1) = 0) then begin asl[aslnr]:=''; end;
+   for i2 := 0 to high(form1.vocis) do  begin
+    if (form1.vocis[i2].lektion = words[2])and(form1.vocis[i2].ID = words[4]) then
+    begin
+    if ((strtoint(words[3])-1) = 0) then form1.vocis[i2].fehler:='0'
+    else form1.vocis[i2].fehler := inttostr(STRTOINT(form1.vocis[i2].fehler)-1);
+      form1.ado.active:=false;
+      form1.ado.TableName:=form1.vocis[i2].lektion;
+      form1.ado.active:=True;
+    repeat
+     if  form1.ado.Fields[0].Value = form1.vocis[i2].ID then begin
+     form1.ado.edit;
+     if ((strtoint(words[3])-1) <= 0) then form1.ado.Fields[3].value:='0'
+     else form1.ado.Fields[3].value := inttostr(STRTOINT(form1.ado.Fields[3].value)-1);
+     end;
+     form1.ado.next;
+    until form1.ado.eof;
     end;
-    end;                        
-   asl.SaveToFile(path+':fehler_'+words[2]+'.csv');
-   asl.Free;   end;
+   end;
+
+end;
+
    str.delete(0);
    str.SaveToFile(FileName);
 
@@ -191,24 +252,12 @@ asl:=Tstringlist.Create;
     str.Clear;
     str.LoadFromFile(FileName);
     words:=explode('|', str[0], 0);
-    ttt:=explode('[]', words[isc]+'[][]', 0);
+    ttt:=explode('[]', words[isc], 0);
     Memo1.Text:='';
    Memo1.Lines[0]:=ttt[0];
-   Memo1.lines.add(ttt[1]);
-   Memo1.lines.add(ttt[2]);
+  for i2:=1 to high(ttt) do Memo1.lines.add(ttt[i2]);
 
     StaticText7.Caption:=inttostr(str.Count);
-       asl:=Tstringlist.Create;
-   asl.LoadFromFile(path+':fehler_'+words[2]+'.csv');
-   asl:=clearstlist(asl);
-   words[3]:='0';
-   for aslnr := 0 to asl.Count-1 do begin
-       if smartpos(words[0]+'|'+words[1], asl[aslnr], false) = 1 then begin
-          f:=explode('|', asl[aslnr], 3);
-          words[3]:=f[2];
-       end;
-   end;
-   asl.Free;
     Label5.Caption := words[3];
     Button2.Enabled:=True;
     Label1.Caption := 'Lektion '+words[2];
@@ -241,7 +290,7 @@ asl:=Tstringlist.Create;
         Form4.Show;
         Hide;
         end;
- BitBtn1.Visible:=False;
+             BitBtn1.Visible:=False;
              BitBtn3.Visible:=False;
              Button1.Visible:=True;
 
@@ -269,42 +318,32 @@ filecachesl.SaveToFile(Filecache);
 end;
 
 procedure TForm8.BitBtn3Click(Sender: TObject);
- var   asl:TStringlist;
-        ttt,f: TArray;
+ var
+        ttt: TArray;
         tmpstr:String;
-        aslnr:Integer;
-        found:boolean;
+        i2:Integer;
 begin
 
 if (Statictext8.Caption = '1') then
    begin
-   found:=false;
-   asl:=Tstringlist.Create;
-   asl.LoadFromFile(path+':fehler_'+words[2]+'.csv');
-       for aslnr := 0 to asl.Count - 1 do begin
-     if (smartpos(words[0]+'|'+words[1]+'|'+words[3], asl[aslnr], false) = 1) then begin
-      asl[aslnr]:=words[0]+'|'+words[1]+'|'+inttostr((strtoint(words[3])+2));
-          tmpstr:=words[0]+'|'+words[1]+'|'+inttostr((strtoint(words[3])+2));
-      found:=true;
+   for i2 := 0 to high(form1.vocis) do  begin
+    if (form1.vocis[i2].lektion = words[2])and(form1.vocis[i2].ID = words[4]) then
+    begin
+     form1.vocis[i2].fehler := inttostr(STRTOINT(form1.vocis[i2].fehler)+2);
+     form1.ado.active:=false;
+     form1.ado.TableName:=form1.vocis[i2].lektion;
+     form1.ado.active:=True;
+    repeat
+     if  form1.ado.Fields[0].Value = form1.vocis[i2].ID then begin
+     form1.ado.edit;
+     form1.ado.Fields[3].value := inttostr(STRTOINT(form1.ado.Fields[3].value)+2);
+     end;
+     form1.ado.next;
+    until form1.ado.eof;
+     str.Add(form1.vocis[i2].franz+'|'+form1.vocis[i2].deutsch+'|'+form1.vocis[i2].lektion+'|'+form1.vocis[i2].fehler+'|'+form1.vocis[i2].id);
+     filecachesl.add(form1.vocis[i2].franz+'|'+form1.vocis[i2].deutsch+'|'+form1.vocis[i2].lektion+'|'+form1.vocis[i2].fehler+'|'+form1.vocis[i2].id);
     end;
-    end;
-
-       if (found=false) then begin
-       tmpstr:=words[0]+'|'+words[1]+'|2';
-       asl.add(tmpstr);
-       end;
-
-   
-   asl.SaveToFile(path+':fehler_'+words[2]+'.csv');
-
-   asl.Free;
-   if found = false then tmpstr:=words[0]+'|'+words[1]+'|'+words[2]+'|2'
-   else tmpstr:=words[0]+'|'+words[1]+'|'+words[2]+'|'+inttostr((strtoint(words[3])+2));
-
-   str.Add(tmpstr);
-
-   filecachesl.add(tmpstr);
-
+   end;
     str.Delete(0);
    end;
   if (Statictext8.Caption <> '1') then
@@ -338,23 +377,11 @@ if (Statictext8.Caption = '1') then
     str.Clear;
     str.LoadFromFile(FileName);
     words:=explode('|', str[0], 0);
-    ttt:=explode('[]', words[isc]+'[][]', 0);
+    ttt:=explode('[]', words[isc], 0);
     Memo1.Text:='';
    Memo1.Lines[0]:=ttt[0];
-   Memo1.lines.add(ttt[1]);
-   Memo1.lines.add(ttt[2]);
+   for i2:=1 to high(ttt) do Memo1.lines.add(ttt[i2]);
     StaticText7.Caption:=inttostr(str.Count);
-       asl:=Tstringlist.Create;
-   asl.LoadFromFile(path+':fehler_'+words[2]+'.csv');
-   asl:=clearstlist(asl);
-   words[3]:='0';
-   for aslnr := 0 to asl.Count-1 do begin
-       if smartpos(words[0]+'|'+words[1], asl[aslnr], false) = 1 then begin
-          f:=explode('|', asl[aslnr], 3);
-          words[3]:=f[2];
-       end;
-   end;
-   asl.Free;
     Label5.Caption := words[3];
     Button2.Enabled:=True;
     Label1.Caption := 'Lektion '+words[2];
@@ -390,26 +417,31 @@ if (Statictext8.Caption = '1') then
 end;
 procedure TForm8.Button2Click(Sender: TObject);
 var
-  tmpstr,url: String;
-begin
+  tmpstr,strn,url: String;
+begin   
 HTTP := TIdHTTP.Create;
   try
   
-
+  
    //möglicherweise wird noch ein Parameter erwartet, hab ich nicht im Kopf ;-)
 
   words:=explode('|', str[0], 0);
   words[0]:=stringreplace(words[0],' ', '%20',  [rfReplaceAll]);
   words[1]:=stringreplace(words[1],' ', '%20',  [rfReplaceAll]);
    sleep(100);
-  url:='http://cadac.trachtengruppe-merenschwand.ch/mail.php?prog='+Form1.Name+'&&lektion='+words[2]+'&&de='+words[1]+'&&en='+words[0]+'&&iwas';
- // showmessage(url);
+
+
+  if inputquery('Bericht', 'Danke fürs Fehlermelden! Gib mir doch noch einen Hinweis, was falsch ist:', strn)
+  then begin
+  strn:=stringreplace(strn,' ', '%20',  [rfReplaceAll]);
+  url:='http://cadac.trachtengruppe-merenschwand.ch/mail.php?prog='+Form1.Name+'&&lektion='+words[2]+'&&de='+words[1]+'&&en='+words[0]+'&&iwas&&tmpstr='+strn;
+ //showmessage(url);
   tmpstr:= HTTP.Get(url);
 
    if tmpstr = '1' then showmessage('Fehler gemeldet!');
    if tmpstr = '2' then showmessage('Fehler wurde bereits gemeldet.');
    if tmpstr = '0' then   begin end;
-
+       end;
   except
     //beep();
   end;
@@ -420,12 +452,12 @@ end;
 
 procedure TForm8.Button1Click(Sender: TObject);
  var
-        tar: TArray;
+        tar: TArray; i2:integer;
 begin
-     tar := explode('[]',words[isc2]+'[]-[]-',0);
-      if tar[0] <> '' then Memo2.Lines[0]:=tar[0];
-      if tar[1] <> '-' then Memo2.Lines[1]:=tar[1];
-      if tar[2] <> '-' then Memo2.Lines[2]:=tar[2];
+     tar := explode('[]',words[isc2],0);
+     Memo2.Lines[0]:=tar[0];
+     for i2:=1 to high(tar) do Memo2.Lines[i2]:=tar[i2];
+
 
              BitBtn1.Visible:=True;
              BitBtn3.Visible:=True;
@@ -452,6 +484,7 @@ Memo2.Text:='';
 FileName:=Form1.FileName;
 Filecache:=Form1.FileCache;
 Path:=Form1.Path;
+memo1.BorderStyle:=bsnone;
 str:=Tstringlist.Create;
 filecachesl:=Tstringlist.Create;
   FWndProc := Memo1.WindowProc; // alte Fensterproceure merken
@@ -467,9 +500,8 @@ timer1.enabled:=false;
 end;
 
 procedure TForm8.FormShow(Sender: TObject);
-var ch,asl:TStringlist;
-    ttt,f:TArray;
-    aslnr:Integer;
+var ch:TStringlist;
+    ttt:TArray;
 begin
 if form1.ischanged=True then begin isc:=0; isc2:=1;end
    else begin isc := 1;isc2:=0;  end;
@@ -481,17 +513,6 @@ if form1.ischanged=True then begin isc:=0; isc2:=1;end
     memo1.Lines.add('');       Memo1.Lines[1]:=ttt[1];
     memo1.Lines.add('');       Memo1.Lines[2]:=ttt[2];
     StaticText7.Caption:=inttostr(str.Count);
-       asl:=Tstringlist.Create;
-   asl.LoadFromFile(path+':fehler_'+words[2]+'.csv');
-   asl:=clearstlist(asl);
-   words[3]:='0';
-   for aslnr := 0 to asl.Count-1 do begin
-       if smartpos(words[0]+'|'+words[1], asl[aslnr], false) = 1 then begin
-          f:=explode('|', asl[aslnr], 3);
-          words[3]:=f[2];
-       end;
-   end;
-   asl.Free;
     Label5.Caption := words[3];
     Label1.Caption := 'Lektion '+words[2];
     Memo2.Text:='';
